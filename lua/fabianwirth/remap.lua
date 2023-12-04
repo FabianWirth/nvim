@@ -203,9 +203,7 @@ map({
 		["<leader>db"] = { "<cmd> DapToggleBreakpoint <CR>" },
 		["<leader>du"] = {
 			function()
-				local widgets = require "dap.ui.widgets"
-				local sidebar = widgets.sidebar(widgets.scopes)
-				sidebar.open()
+				require("dapui").toggle()
 			end,
 			"Open debugging sidebar",
 		},
@@ -215,5 +213,6 @@ map({
 		["<leader>do"] = { "<cmd> DapStepOut <CR>" },
 		["<leader>dr"] = { "<cmd> DapRestart <CR>" },
 		["<leader>dx"] = { "<cmd> DapStop <CR>" },
+		["<leader>dK"] = { function () require("dapui").eval(); require("dapui").eval() end },
 	}
 })
