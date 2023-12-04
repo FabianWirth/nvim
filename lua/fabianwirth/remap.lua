@@ -52,11 +52,8 @@ map({
 	n = {
 		["gD"] = { function() vim.lsp.buf.declaration() end, "LSP declaration", },
 		["gd"] = { function() vim.lsp.buf.definition() end, "LSP definition", },
-
 		["K"] = { function() vim.lsp.buf.hover() end, "LSP hover", },
-
 		["gi"] = { function() vim.lsp.buf.implementation() end, "LSP implementation", },
-
 		["<leader>ls"] = { function() vim.lsp.buf.signature_help() end, "LSP signature help", },
 
 		["<leader>D"] = { function() vim.lsp.buf.type_definition() end, "LSP definition type", },
@@ -162,7 +159,6 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>fqf', builtin.quickfix, {})
 vim.keymap.set('n', '<leader>fvo', builtin.vim_options, {})
 vim.keymap.set('n', '<leader>fkm', builtin.keymaps, {})
-vim.keymap.set('n', '<leader>fp', builtin.planets, {})
 
 vim.keymap.set('n', "<leader>impl", builtin.lsp_implementations, {})
 vim.keymap.set('n', "<leader>ref", builtin.lsp_references, {})
