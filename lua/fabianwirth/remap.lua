@@ -7,8 +7,6 @@ vim.keymap.set("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>")
 vim.keymap.set("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>")
 vim.keymap.set("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>")
 
--- set default register to +	
-
 local map = function(map)
 	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
 	local bindings = { "v", "n", "i", "t", "x" }
@@ -28,7 +26,7 @@ end
 
 map({
 	v = {
-    ["J"] = ":m '>+1<CR>gv=gv", -- move line up
+		["J"] = ":m '>+1<CR>gv=gv", -- move line up
 		["K"] = ":m '>-2<CR>gv=gv", -- move line down
 	},
 	n = {
@@ -164,6 +162,7 @@ map({
 			end,
 			"update crates",
 		},
+		["<leader>rci"] = {function() require("crates").show_popup() end },
 	},
 })
 
@@ -177,25 +176,3 @@ map({
 		["<leader>x"] = { "<cmd>bdelete<CR>" }
 	}
 })
-
-local cmp = require("cmp")
-
--- cmp
--- map({
--- 	i = {
--- 		["<C-p>"] = { cmp.mapping.select_prev_item() },
--- 		["<C-n>"] = { cmp.mapping.select_next_item() },
--- 		["<C-d>"] = { cmp.mapping.scroll_docs(-4) },
--- 		["<C-f>"] = { cmp.mapping.scroll_docs(4) },
--- 		["<C-Space>"] = { cmp.mapping.complete() },
--- 		["<C-e>"] = { cmp.mapping.close() },
--- 		["<CR>"] = { cmp.mapping.confirm {
--- 			behavior = cmp.ConfirmBehavior.Insert,
--- 			select = true,
--- 		} },
---
--- 		["<C-j>"] = { function(fallback) if cmp.visible() then cmp.select_next_item() else fallback() end end },
---
--- 		["<C-k>"] = { function(fallback) if cmp.visible() then cmp.select_prev_item() else fallback() end end },
--- 	}
--- })
