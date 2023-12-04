@@ -1,10 +1,10 @@
 local cmp = require "cmp"
 
 local cmp_ui = {
-	border_color = "FloatBorder",
+	border_color = "grey_fg",
 	icons = true,
 	lspkind_text = true,
-	selected_item_bg = "colored",
+	selected_item_bg = "simple",
 	style = "atom_colored",
 }
 local cmp_style = cmp_ui.style
@@ -87,7 +87,7 @@ local options = {
 	window = {
 		completion = {
 			side_padding = (cmp_style ~= "atom" and cmp_style ~= "atom_colored") and 1 or 0,
-			-- winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
+			winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel",
 			scrollbar = false,
 		},
 		documentation = {
@@ -141,11 +141,11 @@ local options = {
 	},
 	sources = {
 		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
 		{ name = "buffer" },
 		{ name = "nvim_lua" },
 		{ name = "path" },
-		{ name = "crates" }
+		{ name = "crates" },
+		{ name = "luasnip" },
 	},
 }
 
@@ -153,4 +153,4 @@ if cmp_style ~= "atom" and cmp_style ~= "atom_colored" then
 	options.window.completion.border = border "CmpBorder"
 end
 
-cmp.setup(options)
+-- cmp.setup(options)

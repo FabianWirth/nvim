@@ -10,29 +10,26 @@ vim.keymap.set("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>")
 -- set default register to +	
 
 local map = function(map)
-	local v_bindings = map.v or {} -- v is for visual mode
-	local n_bindings = map.n or {} -- n is for normal mode
-	local i_bindings = map.i or {} -- i is for insert mode
-	local t_bindings = map.t or {} -- t is for terminal mode
-	for k, v in pairs(v_bindings) do
-		vim.keymap.set("v", k, v[1])
-	end
-	for k, v in pairs(n_bindings) do
-		vim.keymap.set("n", k, v[1])
-	end
-	for k, v in pairs(i_bindings) do
-		vim.keymap.set("i", k, v[1])
-	end
-	for k, v in pairs(t_bindings) do
-		vim.keymap.set("t", k, v[1])
+	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
+	local bindings = { "v", "n", "i", "t", "x" }
+	for _, mode in ipairs(bindings) do
+		local mode_bindings = map[mode] or {}
+		for k, v in pairs(mode_bindings) do
+			local value;
+			if type(v) == "string" then
+				value = v
+			else
+				value = v[1]
+			end
+			vim.keymap.set(mode, k, value)
+		end
 	end
 end
 
-
 map({
 	v = {
-		["J"] = { ":m '>+1<CR>gv=gv", "move one up" },
-		["K"] = { ":m '>-2<CR>gv=gv", "move one down" },
+    ["J"] = ":m '>+1<CR>gv=gv", -- move line up
+		["K"] = ":m '>-2<CR>gv=gv", -- move line down
 	},
 	n = {
 		["<C-d>"] = { "<C-d>zz", "jump half page in middle up" },
@@ -157,3 +154,47 @@ vim.keymap.set("n", "<leader>ff", builtin.git_files, {})
 vim.keymap.set('n', '<leader>fw', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+
+-- crates
+map({
+	n = {
+		["<leader>rcu"] = {
+			function()
+				require("crates").upgrade_all_crates()
+			end,
+			"update crates",
+		},
+	},
+})
+
+-- buffer
+map({
+	n = {
+		["<Shift-h>"] = { "<cmd>bprev<CR>" },
+		["<S-h>"] = { "<cmd>bprev<CR>" },
+		["<Shift-l>"] = { "<cmd>bnext<CR>" },
+		["<S-l>"] = { "<cmd>bnext<CR>" },
+		["<leader>x"] = { "<cmd>bdelete<CR>" }
+	}
+})
+
+local cmp = require("cmp")
+-- cmp
+map({
+	i = {
+		["<C-p>"] = { cmp.mapping.select_prev_item() },
+		["<C-n>"] = { cmp.mapping.select_next_item() },
+		["<C-d>"] = { cmp.mapping.scroll_docs(-4) },
+		["<C-f>"] = { cmp.mapping.scroll_docs(4) },
+		["<C-Space>"] = { cmp.mapping.complete() },
+		["<C-e>"] = { cmp.mapping.close() },
+		["<CR>"] = { cmp.mapping.confirm {
+			behavior = cmp.ConfirmBehavior.Insert,
+			select = true,
+		} },
+
+		["<C-j>"] = { function(fallback) if cmp.visible() then cmp.select_next_item() else fallback() end end },
+
+		["<C-k>"] = { function(fallback) if cmp.visible() then cmp.select_prev_item() else fallback() end end },
+	}
+})
