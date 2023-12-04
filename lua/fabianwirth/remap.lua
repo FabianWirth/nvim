@@ -130,11 +130,7 @@ map({
 		["<leader>tt"] = { "<cmd>ToggleTerm<CR>", "Toggle terminal" },
 		["<leader>tw"] = { "<cmd>ToggleTerm direction=horizontal<CR>", "Toggle terminal horizontal" },
 		["<leader>tv"] = { "<cmd>ToggleTerm direction=vertical<CR>", "Toggle terminal vertical" },
-		["<leader>tlg"] = {
-			function()
-				lazygit:toggle()
-			end,
-			"Open lazygit" }
+		["<leader>tlg"] = { function() lazygit:toggle() end, "Open lazygit" }
 	},
 	t = {
 		["<C-h>"] = { "<C-\\><C-n><C-w>h", "Navigate left" },
@@ -149,9 +145,18 @@ map({
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>fa", builtin.find_files, {})
 vim.keymap.set("n", "<leader>ff", builtin.git_files, {})
+vim.keymap.set("n", "<leader>ft", builtin.treesitter, {})
 vim.keymap.set('n', '<leader>fw', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fc', builtin.commands, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>fqf', builtin.quickfix, {})
+vim.keymap.set('n', '<leader>fvo', builtin.vim_options, {})
+vim.keymap.set('n', '<leader>fkm', builtin.keymaps, {})
+
+vim.keymap.set('n', "<leader>impl", builtin.lsp_implementations, {})
+vim.keymap.set('n', "<leader>ref", builtin.lsp_references, {})
+vim.keymap.set('n', "<leader>lws", builtin.lsp_workspace_symbols, {})
 
 -- crates
 map({
@@ -162,7 +167,7 @@ map({
 			end,
 			"update crates",
 		},
-		["<leader>rci"] = {function() require("crates").show_popup() end },
+		["<leader>rci"] = { function() require("crates").show_popup() end },
 	},
 })
 
@@ -174,5 +179,41 @@ map({
 		["<Shift-l>"] = { "<cmd>bnext<CR>" },
 		["<S-l>"] = { "<cmd>bnext<CR>" },
 		["<leader>x"] = { "<cmd>bdelete<CR>" }
+	}
+})
+
+-- neotest
+map({
+	n = {
+		["<leader>Tr"] = { ":lua require('neotest').run.run()<cr>", "run closest test" },
+		["<leader>Td"] = { ":lua require('neotest').run.run({strategy = 'dap'})<cr>", "run closest test" },
+		["<leader>Tx"] = { ":lua require('neotest').run.stop()<cr>", "stop test runs" },
+		["<leader>Tf"] = {
+			":lua require('neotest').run.run(vim.fn.expand('%'))<cr>",
+			"run all tests in file",
+		},
+		["<leader>Tp"] = { ":lua require('neotest').output_panel.toggle()<cr>", "toggle test panel" },
+		["<leader>Ts"] = { ":lua require('neotest').summary.toggle()<cr>", "toggle summary panel" },
+	}
+})
+
+-- dap
+map({
+	n = {
+		["<leader>db"] = { "<cmd> DapToggleBreakpoint <CR>" },
+		["<leader>du"] = {
+			function()
+				local widgets = require "dap.ui.widgets"
+				local sidebar = widgets.sidebar(widgets.scopes)
+				sidebar.open()
+			end,
+			"Open debugging sidebar",
+		},
+		["<leader>dc"] = { "<cmd> DapContinue <CR>" },
+		["<leader>dn"] = { "<cmd> DapNext <CR>" },
+		["<leader>di"] = { "<cmd> DapStepInto <CR>" },
+		["<leader>do"] = { "<cmd> DapStepOut <CR>" },
+		["<leader>dr"] = { "<cmd> DapRestart <CR>" },
+		["<leader>dx"] = { "<cmd> DapStop <CR>" },
 	}
 })

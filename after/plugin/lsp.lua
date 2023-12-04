@@ -1,3 +1,51 @@
+require("dapui").setup()
+local dap = require('dap')
+
+dap.adapters.php = {
+	type = 'executable',
+	command = 'node',
+	args = { '/Users/fabianwirth/Development/php_debug/vscode-php-debug/out/phpDebug.js' }
+}
+
+dap.configurations.php = {
+  {
+    log = true,
+    type = "php",
+    request = "launch",
+    name = "Listen for XDebug",
+    port = 9003,
+    stopOnEntry = false,
+    xdebugSettings = {
+      max_children = 512,
+      max_data = 1024,
+      max_depth = 4,
+    },
+    breakpoints = {
+      exception = {
+        Notice = false,
+        Warning = false,
+        Error = false,
+        Exception = false,
+        ["*"] = false,
+      },
+    },
+  }
+}
+dap.defaults.fallback.switchbuf = "useopen"
+
+require("neotest").setup {
+	adapters = {
+		require("neotest-phpunit")({
+			env = {
+				XDEBUG_CONFIG = "idekey=neotest",
+			},
+			dap = dap.configurations.php[1],
+		})
+	},
+}
+require("neodev").setup({
+	library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
+})
 local lsp = require("lsp-zero")
 
 local M = {}

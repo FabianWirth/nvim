@@ -41,6 +41,9 @@ return {
 		dependencies = "neovim/nvim-lspconfig",
 		config = true
 	},
+	"mfussenegger/nvim-dap",
+	{ "rcarriga/nvim-dap-ui" },
+	{ "folke/neodev.nvim" },
 	{
 		"saecki/crates.nvim",
 		ft = { "toml" },
@@ -53,4 +56,13 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		run = "TSUpdate",
 	},
+	{
+		"nvim-neotest/neotest",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"antoinemadec/FixCursorHold.nvim",
+			{ "olimorris/neotest-phpunit", url = "https://github.com/przepompownia/neotest-phpunit.git", branch = "dap-strategy" },
+
+		},
+	}
 }

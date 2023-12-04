@@ -5,5 +5,3 @@ require("lualine").setup({
 		globalstatus = true
 	},
 })
-
-print("lualine loaded")

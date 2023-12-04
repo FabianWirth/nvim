@@ -7,7 +7,7 @@ require("fabianwirth.remap")
 vim.cmd("set tabstop=2")
 
 -- setting the defaults like colorscheme
-vim.cmd("colorscheme kanagawa")
+-- vim.cmd("colorscheme catppuccin")
 vim.opt.cmdheight = 1
 vim.cmd [[highlight Normal ctermbg=none guibg=none]]
 vim.api.nvim_set_hl(0, "Float", { bg = "none" })

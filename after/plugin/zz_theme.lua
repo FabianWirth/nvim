@@ -31,3 +31,23 @@ require("kanagawa").setup({
 
 -- font
 vim.opt.guifont = { "JetBrainsMonoNL NFM SemiBold", ":h10" }
+
+require("catppuccin").setup({
+	flavour = "mocha",
+	term_colors = true,
+	dim_inactive = {
+		enabled = false, -- dims the background color of inactive window
+		shade = "dark",
+		percentage = 0.0, -- percentage of the shade to apply to the inactive window
+	},
+	transparent_background = false,
+	integrations = {
+		cmp = true,
+		gitsigns = true,
+		nvimtree = true,
+		treesitter = true,
+		mason = true,
+		window_picker = true,
+		telescope = { enabled = true }
+	}
+})
