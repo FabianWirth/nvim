@@ -20,9 +20,7 @@ return {
 		name = 'window-picker',
 		event = 'VeryLazy',
 		version = '2.*',
-		config = function()
-			require 'window-picker'.setup()
-		end,
+		config = true,
 	},
 	{ 'akinsho/toggleterm.nvim', version = "*", config = true },
 	{ "rebelot/kanagawa.nvim", },
@@ -100,11 +98,12 @@ return {
 	},
 	{
 		"nvim-lualine/lualine.nvim",
-		requires = { "nvim-tree/nvim-web-devicons" },
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 	{
 		'akinsho/bufferline.nvim',
 		version = "*",
 		dependencies = 'nvim-tree/nvim-web-devicons'
-	}
+	},
+	{ "lewis6991/gitsigns.nvim", config = function() require('gitsigns').setup() end },
 }
