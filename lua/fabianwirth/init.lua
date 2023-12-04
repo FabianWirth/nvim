@@ -1,4 +1,4 @@
-local plugins = require("fabianwirth.plugins")
+local plugins = require("fabianwirth.plugins.init")
 
 require("lazy").setup(plugins)
 require("fabianwirth.remap")
