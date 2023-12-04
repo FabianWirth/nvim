@@ -125,12 +125,21 @@ map({
 -- toggleterm
 local Terminal = require("toggleterm.terminal").Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+local tinker = Terminal:new({ cmd = "php artisan tinker", hidden = true, direction = "float", count = 5, close_on_exit = false })
 map({
 	n = {
 		["<leader>tt"] = { "<cmd>ToggleTerm<CR>", "Toggle terminal" },
 		["<leader>tw"] = { "<cmd>ToggleTerm direction=horizontal<CR>", "Toggle terminal horizontal" },
 		["<leader>tv"] = { "<cmd>ToggleTerm direction=vertical<CR>", "Toggle terminal vertical" },
-		["<leader>tlg"] = { function() lazygit:toggle() end, "Open lazygit" }
+		["<leader>tlg"] = { function() lazygit:toggle() end, "Open lazygit" },
+		["<leader>tat"] = { function() tinker:toggle() end, "Open tinker" },
+	},
+	v = {
+		["<space>s"] = {
+			function()
+				require("toggleterm").send_lines_to_terminal("visual_selection", true, { args = 5 }) -- 5 is the count of the terminal that is running tinker
+			end
+		}
 	},
 	t = {
 		["<C-h>"] = { "<C-\\><C-n><C-w>h", "Navigate left" },
@@ -145,7 +154,7 @@ map({
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>fa", builtin.find_files, {})
 vim.keymap.set("n", "<leader>ff", builtin.git_files, {})
-vim.keymap.set("n", "<leader>ft", builtin.treesitter, {})
+vim.keymap.set("n", "<leader>ft", "<cmd> Telescope toggleterm_manager<CR>", {})
 vim.keymap.set('n', '<leader>fw', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fc', builtin.commands, {})
@@ -153,6 +162,7 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>fqf', builtin.quickfix, {})
 vim.keymap.set('n', '<leader>fvo', builtin.vim_options, {})
 vim.keymap.set('n', '<leader>fkm', builtin.keymaps, {})
+vim.keymap.set('n', '<leader>fp', builtin.planets, {})
 
 vim.keymap.set('n', "<leader>impl", builtin.lsp_implementations, {})
 vim.keymap.set('n', "<leader>ref", builtin.lsp_references, {})
@@ -213,6 +223,8 @@ map({
 		["<leader>do"] = { "<cmd> DapStepOut <CR>" },
 		["<leader>dr"] = { "<cmd> DapRestart <CR>" },
 		["<leader>dx"] = { "<cmd> DapStop <CR>" },
-		["<leader>dK"] = { function () require("dapui").eval(); require("dapui").eval() end },
+		["<leader>dK"] = { function()
+			require("dapui").eval(); require("dapui").eval()
+		end },
 	}
 })

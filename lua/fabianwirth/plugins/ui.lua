@@ -6,6 +6,15 @@ return {
 		dependencies = { 'nvim-lua/plenary.nvim' }
 	},
 	{
+		"ryanmsnyder/toggleterm-manager.nvim",
+		dependencies = {
+			"akinsho/nvim-toggleterm.lua",
+			"nvim-telescope/telescope.nvim",
+			"nvim-lua/plenary.nvim", -- only needed because it's a dependency of telescope
+		},
+		config = true,
+	},
+	{
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
 		dependencies = {
