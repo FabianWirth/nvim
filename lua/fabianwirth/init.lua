@@ -20,3 +20,6 @@ vim.cmd("highlight CursorLine guibg=none")
 vim.opt.showmode = false
 
 vim.cmd("set relativenumber")
+
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
