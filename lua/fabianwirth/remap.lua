@@ -9,9 +9,19 @@ vim.keymap.set("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>")
 
 local map = function(map)
 	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
+	local wk = require("which-key")
 	local bindings = { "v", "n", "i", "t", "x" }
 	for _, mode in ipairs(bindings) do
-		local mode_bindings = map[mode] or {}
+		wk.register(map[mode], { mode = mode })
+	end
+end
+
+-- map native
+local mapN = function(m)
+	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
+	local bindings = { "v", "n", "i", "t", "x" }
+	for _, mode in ipairs(bindings) do
+		local mode_bindings = m[mode] or {}
 		for k, v in pairs(mode_bindings) do
 			local value;
 			if type(v) == "string" then
@@ -24,11 +34,14 @@ local map = function(map)
 	end
 end
 
-map({
+mapN({
 	v = {
 		["J"] = ":m '>+1<CR>gv=gv", -- move line up
 		["K"] = ":m '>-2<CR>gv=gv", -- move line down
 	},
+})
+
+map({
 	n = {
 		["<C-d>"] = { "<C-d>zz", "jump half page in middle up" },
 		["<C-u>"] = { "<C-u>zz", "jump half page in middle down" },
@@ -93,7 +106,7 @@ map({
 })
 
 -- neo tree
-map({
+mapN({
 	n = {
 		["<C-f>"] = { "<cmd>Neotree toggle<cr>", desc = "Show file tree" },
 		["<C-o>"] = { "<cmd>Neotree focus<cr>", desc = "Focus file tree" },
@@ -135,7 +148,8 @@ map({
 		["<space>s"] = {
 			function()
 				require("toggleterm").send_lines_to_terminal("visual_selection", true, { args = 5 }) -- 5 is the count of the terminal that is running tinker
-			end
+			end,
+			"Send to php artisan tinker",
 		}
 	},
 	t = {
@@ -149,20 +163,24 @@ map({
 
 -- telescope
 local builtin = require("telescope.builtin")
-vim.keymap.set("n", "<leader>fa", builtin.find_files, {})
-vim.keymap.set("n", "<leader>ff", builtin.git_files, {})
-vim.keymap.set("n", "<leader>ft", "<cmd> Telescope toggleterm_manager<CR>", {})
-vim.keymap.set('n', '<leader>fw', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fc', builtin.commands, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>fqf', builtin.quickfix, {})
-vim.keymap.set('n', '<leader>fvo', builtin.vim_options, {})
-vim.keymap.set('n', '<leader>fkm', builtin.keymaps, {})
+map({
+	n = {
+		["<leader>fa"] = { builtin.find_files, "find all" },
+		["<leader>ff"] = { builtin.git_files, "find git files" },
+		["<leader>ft"] = { "<cmd> Telescope toggleterm_manager<CR>", "find toggleterm" },
+		["<leader>fw"] = { builtin.live_grep, "find word" },
+		["<leader>fb"] = { builtin.buffers, "find buffers" },
+		["<leader>fc"] = { builtin.commands, "find commands" },
+		["<leader>fh"] = { builtin.help_tags, "find help tags" },
+		["<leader>fqf"] = { builtin.quickfix, "find quickfix" },
+		["<leader>fvo"] = { builtin.vim_options, "find vim options" },
+		["<leader>fkm"] = { builtin.keymaps, "find keymaps" },
 
-vim.keymap.set('n', "<leader>impl", builtin.lsp_implementations, {})
-vim.keymap.set('n', "<leader>ref", builtin.lsp_references, {})
-vim.keymap.set('n', "<leader>lws", builtin.lsp_workspace_symbols, {})
+		["<leader>fi"] = { builtin.lsp_implementations, "find lsp implementations" },
+		["<leader>fr"] = { builtin.lsp_references, "find lsp references" },
+		["<leader>fws"] = { builtin.lsp_workspace_symbols, "find lsp workspace symbols" },
+	}
+})
 
 -- crates
 map({
@@ -173,12 +191,12 @@ map({
 			end,
 			"update crates",
 		},
-		["<leader>rci"] = { function() require("crates").show_popup() end },
+		["<leader>rci"] = { function() require("crates").show_popup() end, "show crate popup" },
 	},
 })
 
 -- buffer
-map({
+mapN({
 	n = {
 		["<Shift-h>"] = { "<cmd>bprev<CR>" },
 		["<S-h>"] = { "<cmd>bprev<CR>" },
@@ -221,6 +239,8 @@ map({
 		["<leader>dx"] = { "<cmd> DapStop <CR>" },
 		["<leader>dK"] = { function()
 			require("dapui").eval(); require("dapui").eval()
-		end },
+		end,
+			"Evaluate in debug"
+		},
 	}
 })
