@@ -29,9 +29,8 @@ require("kanagawa").setup({
 	end
 })
 
--- font
-vim.opt.guifont = { "JetBrainsMonoNL NFM SemiBold", ":h10" }
-
+-- -- font
+-- font is defined in the alacritty config. We can't set it here because.
 require("catppuccin").setup({
 	flavour = "mocha",
 	term_colors = true,

@@ -8,7 +8,5 @@ vim.opt.numberwidth = 2
 vim.opt.ruler = false
 vim.opt.statusline = ""
 
-
--- vim.opt.guifont = { "JetBrainsMonoNL NFM SemiBold", ":h10" }
 vim.cmd("colorscheme catppuccin")
 vim.cmd("highlight CursorLine guibg=none")
