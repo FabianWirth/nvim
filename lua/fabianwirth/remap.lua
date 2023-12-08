@@ -39,6 +39,10 @@ mapN({
 		["J"] = ":m '>+1<CR>gv=gv", -- move line up
 		["K"] = ":m '>-2<CR>gv=gv", -- move line down
 	},
+	n = {
+		-- remove search highlight
+		["<ESC>"] = ":noh<CR>",
+	}
 })
 
 map({
@@ -71,7 +75,7 @@ map({
 
 		["<leader>D"] = { function() vim.lsp.buf.type_definition() end, "LSP definition type", },
 
-		["<leader>ra"] = { function() require("nvchad.renamer").open() end, "LSP rename", },
+		["<leader>ra"] = { function() vim.lsp.buf.rename() end, "LSP rename", },
 
 		["<leader>ca"] = { function() vim.lsp.buf.code_action() end, "LSP code action", },
 
@@ -163,13 +167,22 @@ map({
 
 -- telescope
 local builtin = require("telescope.builtin")
+local search = require("search")
 map({
 	n = {
 		["<leader>fa"] = { builtin.find_files, "find all" },
-		["<leader>ff"] = { builtin.git_files, "find git files" },
+		["<leader>ff"] = {
+			function()
+				search.open({ tab_id = 2 })
+			end, "search window"
+		},
 		["<leader>ft"] = { "<cmd> Telescope toggleterm_manager<CR>", "find toggleterm" },
-		["<leader>fw"] = { builtin.live_grep, "find word" },
+		["<leader>fw"] = { function()
+			search.open({ tab_id = 3 })
+		end, "find word"
+		},
 		["<leader>fb"] = { builtin.buffers, "find buffers" },
+		["<leader>fvr"] = { builtin.reloader, "find reloaders" },
 		["<leader>fc"] = { builtin.commands, "find commands" },
 		["<leader>fh"] = { builtin.help_tags, "find help tags" },
 		["<leader>fqf"] = { builtin.quickfix, "find quickfix" },
@@ -177,7 +190,9 @@ map({
 		["<leader>fkm"] = { builtin.keymaps, "find keymaps" },
 
 		["<leader>fi"] = { builtin.lsp_implementations, "find lsp implementations" },
-		["<leader>fr"] = { builtin.lsp_references, "find lsp references" },
+		["U"] = { function()
+			builtin.lsp_references(require('telescope.themes').get_cursor())
+		end, "find lsp references" },
 		["<leader>fws"] = { builtin.lsp_workspace_symbols, "find lsp workspace symbols" },
 	}
 })

@@ -3,7 +3,17 @@ return {
 		'nvim-telescope/telescope.nvim',
 		lazy = false,
 		branch = '0.1.x',
+		-- dir = "/Users/fabianwirth/Development/lua/telescope.nvim",
 		dependencies = { 'nvim-lua/plenary.nvim' }
+	},
+	{
+		"FabianWirth/search.nvim",
+		name = "search",
+		lazy = false,
+		dir = "/Users/fabianwirth/Development/lua/search.nvim",
+		dependencies = {
+			"nvim-telescope/telescope.nvim"
+		}
 	},
 	{
 		"ryanmsnyder/toggleterm-manager.nvim",
