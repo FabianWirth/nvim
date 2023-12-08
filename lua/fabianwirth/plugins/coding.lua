@@ -57,6 +57,10 @@ return {
 		run = "TSUpdate",
 	},
 	{
+		"weilbith/nvim-code-action-menu",
+		cmd = "CodeActionMenu",
+	},
+	{
 		"nvim-neotest/neotest",
 		dependencies = {
 			"nvim-lua/plenary.nvim",

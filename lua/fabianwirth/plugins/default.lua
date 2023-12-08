@@ -49,5 +49,6 @@ return {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim"
 		}
-	}
+	},
+	"m4xshen/autoclose.nvim",
 }
