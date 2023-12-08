@@ -39,7 +39,7 @@ require("catppuccin").setup({
 		shade = "dark",
 		percentage = 0.0, -- percentage of the shade to apply to the inactive window
 	},
-	transparent_background = false,
+	transparent_background = true,
 	integrations = {
 		cmp = true,
 		gitsigns = true,
