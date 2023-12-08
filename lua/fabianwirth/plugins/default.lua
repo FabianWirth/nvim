@@ -34,5 +34,20 @@ return {
 			-- or leave it empty to use the default settings
 			-- refer to the configuration section below
 		}
+	},
+	{
+		"jackMort/ChatGPT.nvim",
+		event = "VeryLazy",
+		config = function()
+			local home = os.getenv("HOME")
+			require("chatgpt").setup({
+				api_key_cmd = "gpg --decrypt " .. home .. "/.config/nvim/key.txt.gpg",
+			})
+		end,
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim"
+		}
 	}
 }
