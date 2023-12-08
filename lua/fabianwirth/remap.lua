@@ -77,7 +77,7 @@ map({
 
 		["<leader>ra"] = { function() vim.lsp.buf.rename() end, "LSP rename", },
 
-		["<leader>ca"] = { function() vim.lsp.buf.code_action() end, "LSP code action", },
+		["<leader>ca"] = { "<cmd> CodeActionMenu<CR>", "LSP code action" },
 
 		["gr"] = { function() vim.lsp.buf.references() end, "LSP references", },
 
@@ -257,5 +257,13 @@ map({
 		end,
 			"Evaluate in debug"
 		},
+	}
+})
+
+-- chat gpt
+map({
+	n = {
+		["<leader>cg"] = { "<cmd> ChatGPT<CR>", "Chat GPT" },
+		["<leader>cd"] = { "<cmd> ChatGPTRun docstring<CR>", "Chat make docstring" },
 	}
 })
