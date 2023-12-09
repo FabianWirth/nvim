@@ -8,7 +8,6 @@ vim.cmd("set tabstop=2")
 
 -- setting the defaults like colorscheme
 -- vim.cmd("colorscheme catppuccin")
-vim.opt.cmdheight = 1
 vim.cmd [[highlight Normal ctermbg=none guibg=none]]
 vim.api.nvim_set_hl(0, "Float", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
@@ -17,7 +16,7 @@ vim.api.nvim_set_hl(0, "FloatTitle", { bg = "none" })
 
 -- change color of cursorline to a lighter color
 vim.cmd("highlight CursorLine guibg=none")
-vim.opt.showmode = false
+vim.opt.cmdheight = 0
 
 vim.cmd("set relativenumber")
 

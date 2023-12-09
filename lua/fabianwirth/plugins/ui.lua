@@ -41,4 +41,12 @@ return {
 	},
 	{ 'akinsho/toggleterm.nvim', version = "*", config = true },
 	{ "mbbill/undotree",         lazy = false },
+	{
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+		}
+	}
+
 }
