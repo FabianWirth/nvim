@@ -39,9 +39,8 @@ return {
 		"jackMort/ChatGPT.nvim",
 		event = "VeryLazy",
 		config = function()
-			local home = os.getenv("HOME")
 			require("chatgpt").setup({
-				api_key_cmd = "gpg --decrypt " .. home .. "/.config/nvim/key.txt.gpg",
+				api_key_cmd = "echo $CHATGPT_API_KEY",
 			})
 		end,
 		dependencies = {
