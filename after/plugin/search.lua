@@ -1,31 +1,40 @@
+require("telescope").setup()
 local builtin = require("telescope.builtin")
+
+require("telescope").load_extension("todo-comments")
+require("telescope").load_extension("egrepify")
+require("telescope").load_extension("octo")
+
+local extensions = require("telescope").extensions
+
+local is_git_dir = function()
+	return vim.fn.isdirectory(".git") == 1
+end
+
 require("search").setup({
 	initial_tab = 2,
-	append_tabs = {
+	tabs = {
 		{
-			name = "Symbols",
-			tele_func = builtin.lsp_workspace_symbols,
-			--- todo: check if the client supports document symbols and not just if there is a client
-			available = function()
-				local clients = vim.lsp.get_active_clients()
-				for _, client in ipairs(clients) do
-					if client.server_capabilities.workspaceSymbolProvider then
-						return true
-					end
-				end
-				return false
-			end
+			"All Files",
+			builtin.find_files,
 		},
 		{
-			name = "Buffers",
-			tele_func = builtin.buffers,
+			"Git Files",
+			builtin.git_files,
+			available = is_git_dir,
 		},
 		{
-			name = "Commits",
-			tele_func = builtin.git_commits,
-			available = function()
-				return vim.fn.isdirectory(".git") == 1
-			end
-		}
+			"Grep",
+			extensions.egrepify.egrepify,
+		},
+		{
+			"Todo",
+			function() vim.cmd("TodoTelescope") end
+		},
+		{
+			"Commits",
+			builtin.git_commits,
+			available = is_git_dir
+		},
 	}
 })

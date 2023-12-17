@@ -42,7 +42,8 @@ return {
 		config = true
 	},
 	"mfussenegger/nvim-dap",
-	{ "rcarriga/nvim-dap-ui" },
+	"rcarriga/nvim-dap-ui",
+	"nvimtools/none-ls.nvim",
 	{ "folke/neodev.nvim" },
 	{
 		"saecki/crates.nvim",
@@ -65,8 +66,8 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"antoinemadec/FixCursorHold.nvim",
-			{ "olimorris/neotest-phpunit", url = "https://github.com/przepompownia/neotest-phpunit.git", branch = "dap-strategy" },
-
+			{ "olimorris/neotest-phpunit",   url = "https://github.com/przepompownia/neotest-phpunit.git", branch = "dap-strategy" },
+			{ "nvim-neotest/neotest-plenary" }
 		},
 	}
 }

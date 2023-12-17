@@ -178,7 +178,7 @@ map({
 		},
 		["<leader>ft"] = { "<cmd> Telescope toggleterm_manager<CR>", "find toggleterm" },
 		["<leader>fw"] = { function()
-			search.open({ tab_id = 3 })
+			search.open({ tab_name = "Grep" })
 		end, "find word"
 		},
 		["<leader>fb"] = { builtin.buffers, "find buffers" },

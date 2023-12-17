@@ -6,12 +6,31 @@ return {
 		dependencies = { 'nvim-lua/plenary.nvim' }
 	},
 	{
+		"pwntester/octo.nvim",
+		dependencies = {
+			"nvim-telescope/telescope.nvim",
+			"nvim-lua/plenary.nvim",
+			"kyazdani42/nvim-web-devicons",
+		},
+		config = true,
+	},
+	{
 		"FabianWirth/search.nvim",
+		-- dir = "/home/fabian/dev/lua/search.nvim",
 		name = "search",
 		lazy = false,
 		dependencies = {
 			"nvim-telescope/telescope.nvim"
 		}
+	},
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = true
+	},
+	{
+		"fdschmidt93/telescope-egrepify.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
 	},
 	{
 		"ryanmsnyder/toggleterm-manager.nvim",

@@ -1,5 +1,13 @@
 require("dapui").setup()
 local dap = require('dap')
+local null = require('null-ls')
+
+null.setup({
+	sources = {
+		null.builtins.formatting.prettier,
+		null.builtins.formatting.pint,
+	}
+})
 
 dap.adapters.php = {
 	type = 'executable',
@@ -8,28 +16,28 @@ dap.adapters.php = {
 }
 
 dap.configurations.php = {
-  {
-    log = true,
-    type = "php",
-    request = "launch",
-    name = "Listen for XDebug",
-    port = 9003,
-    stopOnEntry = false,
-    xdebugSettings = {
-      max_children = 512,
-      max_data = 1024,
-      max_depth = 4,
-    },
-    breakpoints = {
-      exception = {
-        Notice = false,
-        Warning = false,
-        Error = false,
-        Exception = false,
-        ["*"] = false,
-      },
-    },
-  }
+	{
+		log = true,
+		type = "php",
+		request = "launch",
+		name = "Listen for XDebug",
+		port = 9003,
+		stopOnEntry = false,
+		xdebugSettings = {
+			max_children = 512,
+			max_data = 1024,
+			max_depth = 4,
+		},
+		breakpoints = {
+			exception = {
+				Notice = false,
+				Warning = false,
+				Error = false,
+				Exception = false,
+				["*"] = false,
+			},
+		},
+	}
 }
 dap.defaults.fallback.switchbuf = "useopen"
 
@@ -40,7 +48,8 @@ require("neotest").setup {
 				XDEBUG_CONFIG = "idekey=neotest",
 			},
 			dap = dap.configurations.php[1],
-		})
+		}),
+		require("neotest-plenary").setup()
 	},
 }
 require("neodev").setup({
@@ -68,6 +77,7 @@ M.capabilities.textDocument.completion.completionItem = {
 		},
 	},
 }
+
 
 lsp.preset("recommended")
 lsp.setup {
