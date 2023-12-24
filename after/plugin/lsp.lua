@@ -96,6 +96,22 @@ require("mason-lspconfig").setup({
 	}
 })
 
+require("lspconfig").tsserver.setup {
+	on_attach = function(client)
+		-- Disable formatting in lsp
+		-- client.resolved_capabilities.document_formatting = false
+	end,
+	capabilities = M.capabilities,
+}
+
+require("lspconfig").volar.setup {
+	on_attach = function(client)
+		-- Disable formatting in lsp
+		-- client.resolved_capabilities.document_formatting = false
+	end,
+	capabilities = M.capabilities,
+}
+
 require("lspconfig").rust_analyzer.setup {
 	on_attach = function(client)
 		-- Disable formatting in lsp
