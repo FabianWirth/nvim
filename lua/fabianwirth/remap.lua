@@ -176,6 +176,11 @@ map({
 				search.open({ tab_id = 2 })
 			end, "search window"
 		},
+		["<leader>fg"] = {
+			function()
+				search.open({ collection = "git", tab_name = "Branches"})
+			end, "git pickers"
+		},
 		["<leader>ft"] = { "<cmd> Telescope toggleterm_manager<CR>", "find toggleterm" },
 		["<leader>fw"] = { function()
 			search.open({ tab_name = "Grep" })

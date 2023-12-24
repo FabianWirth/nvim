@@ -46,5 +46,17 @@ require("search").setup({
 			builtin.git_commits,
 			available = is_git_dir
 		},
+	},
+	collections = {
+		git = {
+			initial_tab = 2,
+			tabs = {
+				{ name = "Git files", tele_func = builtin.git_files,    available = is_git_dir },
+				{ name = "Branches",  tele_func = builtin.git_branches, available = is_git_dir },
+				{ name = "Commits",   tele_func = builtin.git_commits,  available = is_git_dir },
+				{ name = "Status",    tele_func = builtin.git_status,   available = is_git_dir },
+				{ name = "Stash",     tele_func = builtin.git_stash,    available = is_git_dir },
+			}
+		}
 	}
 })
