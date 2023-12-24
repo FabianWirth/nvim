@@ -1,4 +1,14 @@
-require("telescope").setup()
+require("telescope").setup {
+	defaults = {
+		mappings = {
+			i = {
+				["<C-j>"] = "move_selection_next",
+				["<C-k>"] = "move_selection_previous",
+			}
+		}
+	}
+
+}
 local builtin = require("telescope.builtin")
 
 require("telescope").load_extension("todo-comments")
