@@ -66,7 +66,7 @@ return {
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"antoinemadec/FixCursorHold.nvim",
-			{ "olimorris/neotest-phpunit",   url = "https://github.com/przepompownia/neotest-phpunit.git", branch = "dap-strategy" },
+			{ "olimorris/neotest-phpunit" },
 			{ "nvim-neotest/neotest-plenary" }
 		},
 	}
