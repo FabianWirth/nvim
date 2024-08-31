@@ -1,21 +1,24 @@
 vim.g.mapleader = " "
 
-vim.keymap.set("n", '<leader>pv', vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 vim.keymap.set("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>")
 vim.keymap.set("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>")
 vim.keymap.set("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>")
 vim.keymap.set("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>")
 
+local wk = require("which-key")
+
 local map = function(map)
 	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
-	local wk = require("which-key")
 	local bindings = { "v", "n", "i", "t", "x" }
 	for _, mode in ipairs(bindings) do
-		wk.register(map[mode], { mode = mode })
+		-- we wrap this in a try catch block because if there is no bindings for a mode
+
+		wk.register(map[mode] or {}, { mode = mode })
 	end
 end
-
+--
 -- map native
 local mapN = function(m)
 	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
@@ -23,7 +26,7 @@ local mapN = function(m)
 	for _, mode in ipairs(bindings) do
 		local mode_bindings = m[mode] or {}
 		for k, v in pairs(mode_bindings) do
-			local value;
+			local value
 			if type(v) == "string" then
 				value = v
 			else
@@ -42,7 +45,7 @@ mapN({
 	n = {
 		-- remove search highlight
 		["<ESC>"] = ":noh<CR>",
-	}
+	},
 })
 
 map({
@@ -67,38 +70,123 @@ vim.keymap.set("n", "<leader>cpe", "<cmd> Copilot enable<CR>")
 -- lsp mappings
 map({
 	n = {
-		["gD"] = { function() vim.lsp.buf.declaration() end, "LSP declaration", },
-		["gd"] = { function() vim.lsp.buf.definition() end, "LSP definition", },
-		["K"] = { function() vim.lsp.buf.hover() end, "LSP hover", },
-		["gi"] = { function() vim.lsp.buf.implementation() end, "LSP implementation", },
-		["<leader>ls"] = { function() vim.lsp.buf.signature_help() end, "LSP signature help", },
+		["gD"] = {
+			function()
+				vim.lsp.buf.declaration()
+			end,
+			"LSP declaration",
+		},
+		["gd"] = {
+			function()
+				vim.lsp.buf.definition()
+			end,
+			"LSP definition",
+		},
+		["K"] = {
+			function()
+				vim.lsp.buf.hover()
+			end,
+			"LSP hover",
+		},
+		["gi"] = {
+			function()
+				vim.lsp.buf.implementation()
+			end,
+			"LSP implementation",
+		},
+		["<leader>ls"] = {
+			function()
+				vim.lsp.buf.signature_help()
+			end,
+			"LSP signature help",
+		},
 
-		["<leader>D"] = { function() vim.lsp.buf.type_definition() end, "LSP definition type", },
+		["<leader>D"] = {
+			function()
+				vim.lsp.buf.type_definition()
+			end,
+			"LSP definition type",
+		},
 
-		["<leader>ra"] = { function() vim.lsp.buf.rename() end, "LSP rename", },
+		["<leader>ra"] = {
+			function()
+				vim.lsp.buf.rename()
+			end,
+			"LSP rename",
+		},
 
 		["<leader>ca"] = { "<cmd> CodeActionMenu<CR>", "LSP code action" },
 
-		["gr"] = { function() vim.lsp.buf.references() end, "LSP references", },
+		["gr"] = {
+			function()
+				vim.lsp.buf.references()
+			end,
+			"LSP references",
+		},
 
-		["<leader>lf"] = { function() vim.diagnostic.open_float { border = "rounded" } end, "Floating diagnostic", },
+		["<leader>lf"] = {
+			function()
+				vim.diagnostic.open_float({ border = "rounded" })
+			end,
+			"Floating diagnostic",
+		},
 
-		["[d"] = { function() vim.diagnostic.goto_prev { float = { border = "rounded" } } end, "Goto prev", },
+		["[d"] = {
+			function()
+				vim.diagnostic.goto_prev({ float = { border = "rounded" } })
+			end,
+			"Goto prev",
+		},
 
-		["]d"] = { function() vim.diagnostic.goto_next { float = { border = "rounded" } } end, "Goto next", },
+		["]d"] = {
+			function()
+				vim.diagnostic.goto_next({ float = { border = "rounded" } })
+			end,
+			"Goto next",
+		},
 
-		["<leader>q"] = { function() vim.diagnostic.setloclist() end, "Diagnostic setloclist", },
+		["<leader>q"] = {
+			function()
+				vim.diagnostic.setloclist()
+			end,
+			"Diagnostic setloclist",
+		},
 
-		["<leader>wa"] = { function() vim.lsp.buf.add_workspace_folder() end, "Add workspace folder", },
+		["<leader>wa"] = {
+			function()
+				vim.lsp.buf.add_workspace_folder()
+			end,
+			"Add workspace folder",
+		},
 
-		["<leader>wr"] = { function() vim.lsp.buf.remove_workspace_folder() end, "Remove workspace folder", },
+		["<leader>wr"] = {
+			function()
+				vim.lsp.buf.remove_workspace_folder()
+			end,
+			"Remove workspace folder",
+		},
 
-		["<leader>wl"] = { function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, "List workspace folders", },
-		["<leader>fm"] = { function() vim.lsp.buf.format { async = true } end, "Format buffer" }
+		["<leader>wl"] = {
+			function()
+				print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+			end,
+			"List workspace folders",
+		},
+		["<leader>fm"] = {
+			function()
+				vim.lsp.buf.format({ async = true })
+			end,
+			"Format buffer",
+		},
 	},
 	v = {
-		["<leader>ca"] = { function() vim.lsp.buf.code_action() end, "LSP code action", },
-	}
+		["<leader>ca"] = {
+			function()
+				vim.lsp.buf.code_action()
+			end,
+			"LSP code action",
+		},
+	},
 })
 
 -- line numbers
@@ -106,7 +194,7 @@ map({
 	n = {
 		["<leader>n"] = { "<cmd> set nu! <CR>", "Toggle line number" },
 		["<leader>rn"] = { "<cmd> set rnu! <CR>", "Toggle relative number" },
-	}
+	},
 })
 
 -- neo tree
@@ -114,7 +202,7 @@ mapN({
 	n = {
 		["<C-f>"] = { "<cmd>Neotree toggle<cr>", desc = "Show file tree" },
 		["<C-o>"] = { "<cmd>Neotree focus<cr>", desc = "Focus file tree" },
-	}
+	},
 })
 
 -- commenting
@@ -139,14 +227,25 @@ map({
 -- toggleterm
 local Terminal = require("toggleterm.terminal").Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
-local tinker = Terminal:new({ cmd = "php artisan tinker", hidden = true, direction = "float", count = 5, close_on_exit = false })
+local tinker =
+	Terminal:new({ cmd = "php artisan tinker", hidden = true, direction = "float", count = 5, close_on_exit = false })
 map({
 	n = {
 		["<leader>tt"] = { "<cmd>ToggleTerm<CR>", "Toggle terminal" },
 		["<leader>tw"] = { "<cmd>ToggleTerm direction=horizontal<CR>", "Toggle terminal horizontal" },
 		["<leader>tv"] = { "<cmd>ToggleTerm direction=vertical<CR>", "Toggle terminal vertical" },
-		["<leader>tlg"] = { function() lazygit:toggle() end, "Open lazygit" },
-		["<leader>tat"] = { function() tinker:toggle() end, "Open tinker" },
+		["<leader>tlg"] = {
+			function()
+				lazygit:toggle()
+			end,
+			"Open lazygit",
+		},
+		["<leader>tat"] = {
+			function()
+				tinker:toggle()
+			end,
+			"Open tinker",
+		},
 	},
 	v = {
 		["<space>s"] = {
@@ -154,7 +253,7 @@ map({
 				require("toggleterm").send_lines_to_terminal("visual_selection", true, { args = 5 }) -- 5 is the count of the terminal that is running tinker
 			end,
 			"Send to php artisan tinker",
-		}
+		},
 	},
 	t = {
 		["<C-h>"] = { "<C-\\><C-n><C-w>h", "Navigate left" },
@@ -174,17 +273,21 @@ map({
 		["<leader>ff"] = {
 			function()
 				search.open({ tab_id = 2 })
-			end, "search window"
+			end,
+			"search window",
 		},
 		["<leader>fg"] = {
 			function()
-				search.open({ collection = "git", tab_name = "Branches"})
-			end, "git pickers"
+				search.open({ collection = "git", tab_name = "Branches" })
+			end,
+			"git pickers",
 		},
 		["<leader>ft"] = { "<cmd> Telescope toggleterm_manager<CR>", "find toggleterm" },
-		["<leader>fw"] = { function()
-			search.open({ tab_name = "Grep" })
-		end, "find word"
+		["<leader>fw"] = {
+			function()
+				search.open({ tab_name = "Grep" })
+			end,
+			"find word",
 		},
 		["<leader>fb"] = { builtin.buffers, "find buffers" },
 		["<leader>fvr"] = { builtin.reloader, "find reloaders" },
@@ -195,11 +298,14 @@ map({
 		["<leader>fkm"] = { builtin.keymaps, "find keymaps" },
 
 		["<leader>fi"] = { builtin.lsp_implementations, "find lsp implementations" },
-		["U"] = { function()
-			builtin.lsp_references(require('telescope.themes').get_cursor())
-		end, "find lsp references" },
+		["U"] = {
+			function()
+				builtin.lsp_references(require("telescope.themes").get_cursor())
+			end,
+			"find lsp references",
+		},
 		["<leader>fws"] = { builtin.lsp_workspace_symbols, "find lsp workspace symbols" },
-	}
+	},
 })
 
 -- crates
@@ -211,7 +317,12 @@ map({
 			end,
 			"update crates",
 		},
-		["<leader>rci"] = { function() require("crates").show_popup() end, "show crate popup" },
+		["<leader>rci"] = {
+			function()
+				require("crates").show_popup()
+			end,
+			"show crate popup",
+		},
 	},
 })
 
@@ -222,8 +333,8 @@ mapN({
 		["<S-h>"] = { "<cmd>bprev<CR>" },
 		["<Shift-l>"] = { "<cmd>bnext<CR>" },
 		["<S-l>"] = { "<cmd>bnext<CR>" },
-		["<leader>x"] = { "<cmd>bdelete<CR>" }
-	}
+		["<leader>x"] = { "<cmd>bdelete<CR>" },
+	},
 })
 
 -- neotest
@@ -238,7 +349,7 @@ map({
 		},
 		["<leader>Tp"] = { ":lua require('neotest').output_panel.toggle()<cr>", "toggle test panel" },
 		["<leader>Ts"] = { ":lua require('neotest').summary.toggle()<cr>", "toggle summary panel" },
-	}
+	},
 })
 
 -- dap
@@ -257,18 +368,30 @@ map({
 		["<leader>do"] = { "<cmd> DapStepOut <CR>" },
 		["<leader>dr"] = { "<cmd> DapRestart <CR>" },
 		["<leader>dx"] = { "<cmd> DapStop <CR>" },
-		["<leader>dK"] = { function()
-			require("dapui").eval(); require("dapui").eval()
-		end,
-			"Evaluate in debug"
+		["<leader>dK"] = {
+			function()
+				require("dapui").eval()
+				require("dapui").eval()
+			end,
+			"Evaluate in debug",
 		},
-	}
+	},
+})
+
+--gitsigns
+map({
+	n = {
+		["<leader>gb"] = { "<cmd> Gitsigns blame<CR>", "open blame view" },
+		["<leader>gl"] = { "<cmd> Gitsigns blame_line<CR>", "blame line" },
+		["<leader>gw"] = { "<cmd> Gitsigns toggle_word_diff<CR>", "toggle word dif" },
+		["<leader>gd"] = { "<cmd> Gitsigns diffthis<CR>", "toggle word dif" },
+	},
 })
 
 -- chat gpt
-map({
-	n = {
-		["<leader>cg"] = { "<cmd> ChatGPT<CR>", "Chat GPT" },
-		["<leader>cd"] = { "<cmd> ChatGPTRun docstring<CR>", "Chat make docstring" },
-	}
-})
+-- map({
+-- 	n = {
+-- 		["<leader>cg"] = { "<cmd> ChatGPT<CR>", "Chat GPT" },
+-- 		["<leader>cd"] = { "<cmd> ChatGPTRun docstring<CR>", "Chat make docstring" },
+-- 	},
+-- })

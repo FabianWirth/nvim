@@ -35,19 +35,19 @@ return {
 			-- refer to the configuration section below
 		}
 	},
-	{
-		"jackMort/ChatGPT.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("chatgpt").setup({
-				api_key_cmd = "echo $CHATGPT_API_KEY",
-			})
-		end,
-		dependencies = {
-			"MunifTanjim/nui.nvim",
-			"nvim-lua/plenary.nvim",
-			"nvim-telescope/telescope.nvim"
-		}
-	},
+-- 	{
+-- 		"jackMort/ChatGPT.nvim",
+-- 		event = "VeryLazy",
+-- 		config = function()
+-- 			require("chatgpt").setup({
+-- 				api_key_cmd = "echo $CHATGPT_API_KEY",
+-- 			})
+-- 		end,
+-- 		dependencies = {
+-- 			"MunifTanjim/nui.nvim",
+-- 			"nvim-lua/plenary.nvim",
+-- 			"nvim-telescope/telescope.nvim"
+-- 		}
+-- 	},
 	"m4xshen/autoclose.nvim",
 }

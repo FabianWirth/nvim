@@ -1,18 +1,9 @@
 return {
 	{
-		'nvim-telescope/telescope.nvim',
+		"nvim-telescope/telescope.nvim",
 		lazy = false,
-		branch = '0.1.x',
-		dependencies = { 'nvim-lua/plenary.nvim' }
-	},
-	{
-		"pwntester/octo.nvim",
-		dependencies = {
-			"nvim-telescope/telescope.nvim",
-			"nvim-lua/plenary.nvim",
-			"kyazdani42/nvim-web-devicons",
-		},
-		config = true,
+		branch = "0.1.x",
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 	{
 		"FabianWirth/search.nvim",
@@ -20,17 +11,17 @@ return {
 		name = "search",
 		lazy = false,
 		dependencies = {
-			"nvim-telescope/telescope.nvim"
-		}
+			"nvim-telescope/telescope.nvim",
+		},
 	},
 	{
 		"folke/todo-comments.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		config = true
+		config = true,
 	},
 	{
 		"fdschmidt93/telescope-egrepify.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
 	},
 	{
 		"ryanmsnyder/toggleterm-manager.nvim",
@@ -49,23 +40,32 @@ return {
 			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 			"MunifTanjim/nui.nvim",
 			"3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-		}
+		},
 	},
 	{
-		's1n7ax/nvim-window-picker',
-		name = 'window-picker',
-		event = 'VeryLazy',
-		version = '2.*',
+		"s1n7ax/nvim-window-picker",
+		name = "window-picker",
+		event = "VeryLazy",
+		version = "2.*",
 		config = true,
 	},
-	{ 'akinsho/toggleterm.nvim', version = "*", config = true },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{ "mbbill/undotree",         lazy = false },
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
 		dependencies = {
 			"MunifTanjim/nui.nvim",
-		}
-	}
-
+		},
+	},
+	-- install with yarn or npm
+	{
+		"iamcco/markdown-preview.nvim",
+		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		build = "cd app && yarn install",
+		init = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+		end,
+		ft = { "markdown" },
+	},
 }

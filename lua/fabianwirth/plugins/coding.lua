@@ -1,9 +1,9 @@
 return {
 	{ "github/copilot.vim",        lazy = false },
-	{ 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
-	{ 'neovim/nvim-lspconfig' },
+	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
+	{ "neovim/nvim-lspconfig" },
 	{
-		'hrsh7th/nvim-cmp',
+		"hrsh7th/nvim-cmp",
 		dependencies = {
 			{
 				"windwp/nvim-autopairs",
@@ -15,7 +15,7 @@ return {
 					require("nvim-autopairs").setup()
 
 					-- setup cmp for autopairs
-					local cmp_autopairs = require "nvim-autopairs.completion.cmp"
+					local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 					require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
 				end,
 			},
@@ -26,20 +26,20 @@ return {
 				"hrsh7th/cmp-buffer",
 				"hrsh7th/cmp-path",
 			},
-		}
+		},
 	},
-	{ 'L3MON4D3/LuaSnip' },
-	{ 'williamboman/mason.nvim', lazy = false, },
-	{
-		'williamboman/mason-lspconfig.nvim',
-		lazy = false,
-		requires = { 'williamboman/mason.nvim' },
-	},
+	{ "L3MON4D3/LuaSnip" },
+	-- { "williamboman/mason.nvim", lazy = false },
+	-- {
+	-- 	"williamboman/mason-lspconfig.nvim",
+	-- 	lazy = false,
+	-- 	requires = { "williamboman/mason.nvim" },
+	-- },
 	{
 		"simrat39/rust-tools.nvim",
 		ft = "rust",
 		dependencies = "neovim/nvim-lspconfig",
-		config = true
+		config = true,
 	},
 	"mfussenegger/nvim-dap",
 	"rcarriga/nvim-dap-ui",
@@ -64,10 +64,12 @@ return {
 	{
 		"nvim-neotest/neotest",
 		dependencies = {
+			"nvim-neotest/nvim-nio",
 			"nvim-lua/plenary.nvim",
 			"antoinemadec/FixCursorHold.nvim",
-			{ "olimorris/neotest-phpunit",   url = "https://github.com/przepompownia/neotest-phpunit.git", branch = "dap-strategy" },
-			{ "nvim-neotest/neotest-plenary" }
+			"olimorris/neotest-phpunit",
+			-- { "olimorris/neotest-phpunit",   url = "https://github.com/przepompownia/neotest-phpunit.git", branch = "dap-strategy" },
+			{ "nvim-neotest/neotest-plenary" },
 		},
-	}
+	},
 }
