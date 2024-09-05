@@ -1,15 +1,27 @@
 -- require("dapui").setup()
-local dap = require('dap')
+local dap = require("dap")
 
 vim.lsp.set_log_level("debug")
 
 local null_ls = require("null-ls")
 null_ls.setup({
 	sources = {
-		null_ls.builtins.formatting.phpcsfixer,
+		null_ls.builtins.formatting.phpcsfixer.with({
+			extra_args = { "--verbose" }, -- Add verbose flag for more output
+			-- command = function(params)
+			-- 	-- Redirect output to a file for debugging
+			-- 	local log_file = "/tmp/php-cs-fixer.log"
+			-- 	local cmd = { "php-cs-fixer", "fix", "--verbose", params.bufname }
+			-- 	local handle = io.popen(table.concat(cmd, " ") .. " > " .. log_file .. " 2>&1")
+			-- 	local result = handle:read("*a")
+			-- 	handle:close()
+			-- 	return result
+			-- end,
+		}),
 		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.prettier,
-	}
+	},
+	debug = true,
 })
 
 -- dap.adapters.php = {
@@ -44,10 +56,10 @@ null_ls.setup({
 -- }
 -- dap.defaults.fallback.switchbuf = "useopen"
 --
-require("neotest").setup {
+require("neotest").setup({
 	adapters = {
 		require("neotest-phpunit"),
-  --  ({
+		--  ({
 		-- 	env = {
 		-- 		XDEBUG_CONFIG = "idekey=neotest",
 		-- 	},
@@ -55,21 +67,21 @@ require("neotest").setup {
 		-- }),
 		-- require("neotest-plenary").setup()
 	},
-}
+})
 
 -- require("neodev").setup({
 -- 	library = { plugins = { --[[ "nvim-dap-ui", ]] "neotest" }, types = true },
 -- })
 local lsp = require("lsp-zero")
 lsp.on_attach = function(client, bufnr)
-				lsp.default_keymaps({buffer = bufnr})
+	lsp.default_keymaps({ buffer = bufnr })
 end
-
 
 local M = {}
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
-M.capabilities.textDocument.completion.completionItem = { documentationFormat = { "markdown", "plaintext" },
+M.capabilities.textDocument.completion.completionItem = {
+	documentationFormat = { "markdown", "plaintext" },
 	snippetSupport = true,
 	preselectSupport = true,
 	insertReplaceSupport = true,
@@ -85,7 +97,6 @@ M.capabilities.textDocument.completion.completionItem = { documentationFormat = 
 		},
 	},
 }
-
 
 -- require("mason").setup()
 -- require("mason-lspconfig").setup({
@@ -105,21 +116,21 @@ M.capabilities.textDocument.completion.completionItem = { documentationFormat = 
 -- 	capabilities = M.capabilities,
 -- }
 
-require("lspconfig").intelephense.setup {
+require("lspconfig").intelephense.setup({
 	on_attach = function(client)
 		-- Disable formatting in lsp
 		-- client.resolved_capabilities.document_formatting = false
 	end,
 	capabilities = M.capabilities,
-}
+})
 
-require("lspconfig").rust_analyzer.setup {
+require("lspconfig").rust_analyzer.setup({
 	on_attach = function(client)
 		-- Disable formatting in lsp
 		-- client.resolved_capabilities.document_formatting = false
 	end,
 	capabilities = M.capabilities,
-}
+})
 
 -- require("lspconfig").lua_ls.setup {
 -- 	on_attach = function(client)
@@ -147,35 +158,34 @@ require("lspconfig").rust_analyzer.setup {
 -- }
 --
 
-
-local util = require 'lspconfig.util'
+local util = require("lspconfig.util")
 local function get_typescript_server_path(root_dir)
+	-- TODO: Add support for newer versions of node
+	local global_ts = "/home/fabian/.nvm/versions/node/v22.4.1/lib/node_modules/typescript/lib"
 
-				-- TODO: Add support for newer versions of node
-  local global_ts = '/home/fabian/.nvm/versions/node/v22.4.1/lib/node_modules/typescript/lib'
-
-  local found_ts = ''
-  local function check_dir(path)
-    found_ts =  util.path.join(path, 'node_modules', 'typescript', 'lib')
-    if util.path.exists(found_ts) then
-      return path
-    end
-  end
-  if util.search_ancestors(root_dir, check_dir) then
-    return found_ts
-  else
-    return global_ts
-  end
+	local found_ts = ""
+	local function check_dir(path)
+		found_ts = util.path.join(path, "node_modules", "typescript", "lib")
+		if util.path.exists(found_ts) then
+			return path
+		end
+	end
+	if util.search_ancestors(root_dir, check_dir) then
+		return found_ts
+	else
+		return global_ts
+	end
 end
 
-require'lspconfig'.volar.setup{
-  on_new_config = function(new_config, new_root_dir)
-    new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-  end,
-  filetypes = { "vue" },
+require("lspconfig").volar.setup({
+	on_new_config = function(new_config, new_root_dir)
+		new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+	end,
+	filetypes = { "vue" },
 	on_attach = function(client)
+		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
+		client.server_capabilities.documentFormattingProvider = false
 	end,
 	capabilities = M.capabilities,
-
-}
-
+})

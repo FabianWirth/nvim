@@ -174,7 +174,18 @@ map({
 		},
 		["<leader>fm"] = {
 			function()
-				vim.lsp.buf.format({ async = true })
+				vim.lsp.buf.format({
+					async = true,
+					debug = true,
+					filter = function(client)
+						if client.name == "null-ls" or client.name == "rust_analyzer" then
+							print("formatting null-ls or other legal")
+							return true
+						end
+						print("not formatting: " .. client.name)
+						return false
+					end,
+				})
 			end,
 			"Format buffer",
 		},

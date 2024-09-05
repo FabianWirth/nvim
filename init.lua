@@ -37,3 +37,20 @@ end
 
 vim.cmd('set verbosefile=~/.local/share/nvim/nvim-cmp.log')
 vim.cmd('set verbose=2')
+
+function ListFormattingProviders()
+  local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+  local formatters = {}
+
+  for _, client in pairs(clients) do
+    if client.server_capabilities.documentFormattingProvider then
+      table.insert(formatters, client.name)
+    end
+  end
+
+  if #formatters > 0 then
+    print("Active LSP formatters: " .. table.concat(formatters, ", "))
+  else
+    print("No LSP client is providing formatting.")
+  end
+end
