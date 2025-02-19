@@ -2,6 +2,8 @@ local plugins = require("fabianwirth.plugins.init")
 
 require("lazy").setup(plugins)
 require("fabianwirth.remap")
+require("fabianwirth.commands")
+require("fabianwirth.templater.init")
 
 -- set the tab indent to 2 spaces
 vim.cmd("set tabstop=2")

@@ -1,166 +1,12 @@
--- require("dapui").setup()
+-- globals --
 local dap = require("dap")
-
-vim.lsp.set_log_level("debug")
-
-local null_ls = require("null-ls")
-null_ls.setup({
-	sources = {
-		null_ls.builtins.formatting.phpcsfixer.with({
-			extra_args = { "--verbose" }, -- Add verbose flag for more output
-			-- command = function(params)
-			-- 	-- Redirect output to a file for debugging
-			-- 	local log_file = "/tmp/php-cs-fixer.log"
-			-- 	local cmd = { "php-cs-fixer", "fix", "--verbose", params.bufname }
-			-- 	local handle = io.popen(table.concat(cmd, " ") .. " > " .. log_file .. " 2>&1")
-			-- 	local result = handle:read("*a")
-			-- 	handle:close()
-			-- 	return result
-			-- end,
-		}),
-		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.prettier,
-	},
-	debug = true,
-})
-
--- dap.adapters.php = {
--- 	type = 'executable',
--- 	command = 'node',
--- 	args = { '/home/fabian/dev/debug_systems/vscode-php-debug/out/phpDebug.js' }
--- }
---
--- dap.configurations.php = {
--- 	{
--- 		log = true,
--- 		type = "php",
--- 		request = "launch",
--- 		name = "Listen for XDebug",
--- 		port = 9003,
--- 		stopOnEntry = false,
--- 		xdebugSettings = {
--- 			max_children = 512,
--- 			max_data = 1024,
--- 			max_depth = 4,
--- 		},
--- 		breakpoints = {
--- 			exception = {
--- 				Notice = false,
--- 				Warning = false,
--- 				Error = false,
--- 				Exception = false,
--- 				["*"] = false,
--- 			},
--- 		},
--- 	}
--- }
--- dap.defaults.fallback.switchbuf = "useopen"
---
-require("neotest").setup({
-	adapters = {
-		require("neotest-phpunit"),
-		--  ({
-		-- 	env = {
-		-- 		XDEBUG_CONFIG = "idekey=neotest",
-		-- 	},
-		-- 	dap = dap.configurations.php[1],
-		-- }),
-		-- require("neotest-plenary").setup()
-	},
-})
-
--- require("neodev").setup({
--- 	library = { plugins = { --[[ "nvim-dap-ui", ]] "neotest" }, types = true },
--- })
 local lsp = require("lsp-zero")
-lsp.on_attach = function(client, bufnr)
-	lsp.default_keymaps({ buffer = bufnr })
-end
-
-local M = {}
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
-M.capabilities.textDocument.completion.completionItem = {
-	documentationFormat = { "markdown", "plaintext" },
-	snippetSupport = true,
-	preselectSupport = true,
-	insertReplaceSupport = true,
-	labelDetailsSupport = true,
-	deprecatedSupport = true,
-	commitCharactersSupport = true,
-	tagSupport = { valueSet = { 1 } },
-	resolveSupport = {
-		properties = {
-			"documentation",
-			"detail",
-			"additionalTextEdits",
-		},
-	},
-}
-
--- require("mason").setup()
--- require("mason-lspconfig").setup({
--- 	ensure_installed = {},
--- 	handlers = {
--- 		lsp.default_setup
--- 	}
--- })
-
--- require("lspconfig").tsserver.setup {
--- 				-- only load this lsp in typescript projects
---
--- 	on_attach = function(client)
--- 		-- Disable formatting in lsp
--- 		-- client.resolved_capabilities.document_formatting = false
--- 	end,
--- 	capabilities = M.capabilities,
--- }
-
-require("lspconfig").intelephense.setup({
-	on_attach = function(client)
-		-- Disable formatting in lsp
-		-- client.resolved_capabilities.document_formatting = false
-	end,
-	capabilities = M.capabilities,
-})
-
-require("lspconfig").rust_analyzer.setup({
-	on_attach = function(client)
-		-- Disable formatting in lsp
-		-- client.resolved_capabilities.document_formatting = false
-	end,
-	capabilities = M.capabilities,
-})
-
--- require("lspconfig").lua_ls.setup {
--- 	on_attach = function(client)
--- 		-- Disable formatting in lsp
--- 		-- client.resolved_capabilities.document_formatting = false
--- 	end,
--- 	capabilities = M.capabilities,
--- 	settings = {
--- 		Lua = {
--- 			runtime = {
--- 				version = "LuaJIT",
--- 				path = vim.split(package.path, ";"),
--- 			},
--- 			diagnostics = {
--- 				globals = { "vim" },
--- 			},
--- 			workspace = {
--- 				library = {
--- 					[vim.fn.expand "$VIMRUNTIME/lua"] = true,
--- 					[vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
--- 				},
--- 			},
--- 		},
--- 	},
--- }
---
+local null_ls = require("null-ls")
+local lspconfig = require("lspconfig")
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 local util = require("lspconfig.util")
 local function get_typescript_server_path(root_dir)
-	-- TODO: Add support for newer versions of node
 	local global_ts = "/home/fabian/.nvm/versions/node/v22.4.1/lib/node_modules/typescript/lib"
 
 	local found_ts = ""
@@ -177,15 +23,64 @@ local function get_typescript_server_path(root_dir)
 	end
 end
 
-require("lspconfig").volar.setup({
-	on_new_config = function(new_config, new_root_dir)
-		new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-	end,
-	filetypes = { "vue" },
-	on_attach = function(client)
-		client.resolved_capabilities.document_formatting = false
-		client.server_capabilities.document_formatting = false
-		client.server_capabilities.documentFormattingProvider = false
-	end,
-	capabilities = M.capabilities,
+-- formatting --
+
+null_ls.setup({
+	sources = {
+		null_ls.builtins.formatting.phpcsfixer,
+		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.formatting.prettier,
+		null_ls.builtins.formatting.gofmt,
+	},
+	debug = true,
 })
+
+-- testing --
+
+require("neotest").setup({
+	adapters = {
+		require("neotest-phpunit"),
+	},
+})
+
+-- lsp --
+
+lsp.on_attach = function(client, bufnr)
+	lsp.default_keymaps({ buffer = bufnr })
+
+	client.server_capabilities.document_formatting = false
+end
+
+local S = {
+	intelephense = {
+		settings = {
+			completion = {
+				insertUseDeclaration = true,
+			},
+			telemetry = {
+				enable = false,
+			},
+		},
+	},
+
+	pyright = {},
+	rust_analyzer = {},
+	tailwindcss = {},
+	gopls = {},
+	volar = {
+		on_new_config = function(new_config, new_root_dir)
+			new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+		end,
+		filetypes = { "vue" },
+	},
+}
+
+-- utils --
+
+-- lsp execution --
+for server, config in pairs(S) do
+	lspconfig[server].setup(vim.tbl_deep_extend("force", {
+		on_attach = lsp.on_attach,
+		capabilities = capabilities,
+	}, config))
+end

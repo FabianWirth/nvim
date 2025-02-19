@@ -9,42 +9,63 @@ vim.keymap.set("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>")
 
 local wk = require("which-key")
 
-local map = function(map)
-	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
-	local bindings = { "v", "n", "i", "t", "x" }
-	for _, mode in ipairs(bindings) do
-		-- we wrap this in a try catch block because if there is no bindings for a mode
+local M = {
+	mappings = {},
+	is_registered = false,
+}
 
-		wk.register(map[mode] or {}, { mode = mode })
-	end
+function M.add(key, definition, mode)
+	local description = definition[2] or ""
+	local action = definition[1]
+
+	table.insert(M.mappings, {
+		key = key,
+		description = description,
+		action = action,
+		mode = mode,
+	})
 end
---
--- map native
-local mapN = function(m)
-	-- v is visual mode, n is normal mode, i is insert mode, t is terminal mode, x is visual block mode
+
+function M.register()
+	for _, mapping in ipairs(M.mappings) do
+		if mapping.description == "" then
+			vim.keymap.set(mapping.mode, mapping.key, mapping.action)
+		else
+			wk.add({
+				{ mapping.key, mapping.action, desc = mapping.description, mode = mapping.mode },
+			})
+		end
+	end
+	M.is_registered = true
+end
+
+local map = function(mappings)
 	local bindings = { "v", "n", "i", "t", "x" }
 	for _, mode in ipairs(bindings) do
-		local mode_bindings = m[mode] or {}
-		for k, v in pairs(mode_bindings) do
-			local value
-			if type(v) == "string" then
-				value = v
-			else
-				value = v[1]
+		local mode_mappings = mappings[mode] or {}
+		if mode_mappings ~= nil then
+			for key, definition in pairs(mode_mappings) do
+				M.add(key, definition, mode)
 			end
-			vim.keymap.set(mode, k, value)
 		end
 	end
 end
 
-mapN({
+function TELLME()
+	print("registered: " .. tostring(M.is_registered))
+	print("mappings count: " .. #M.mappings)
+end
+
+vim.keymap.set("n", "<leader>tm?", TELLME)
+
+map({
 	v = {
-		["J"] = ":m '>+1<CR>gv=gv", -- move line up
-		["K"] = ":m '>-2<CR>gv=gv", -- move line down
+		["J"] = { ":m '>+1<CR>gv=gv" }, -- move line up
+		["K"] = { ":m '>-2<CR>gv=gv" }, -- move line down
 	},
 	n = {
 		-- remove search highlight
-		["<ESC>"] = ":noh<CR>",
+		["<ESC>"] = { ":noh<CR>" },
 	},
 })
 
@@ -114,9 +135,42 @@ map({
 			end,
 			"LSP rename",
 		},
-
-		["<leader>ca"] = { "<cmd> CodeActionMenu<CR>", "LSP code action" },
-
+		["<leader>ca"] = {
+			function()
+				require("actions-preview").code_actions()
+			end,
+			"LSP code action",
+		},
+		["<leader>cr"] = {
+			function()
+				vim.lsp.buf.rename()
+			end,
+			"LSP rename",
+		},
+		["<leader>cd"] = {
+			function()
+				vim.lsp.buf.definition()
+			end,
+			"LSP definition",
+		},
+		["<leader>cD"] = {
+			function()
+				vim.lsp.buf.declaration()
+			end,
+			"LSP declaration",
+		},
+		["<leader>cu"] = {
+			function()
+				vim.lsp.buf.references()
+			end,
+			"LSP references",
+		},
+		["<leader>ch"] = {
+			function()
+				vim.lsp.buf.typehierarchy()
+			end,
+			"LSP hierarchy",
+		},
 		["gr"] = {
 			function()
 				vim.lsp.buf.references()
@@ -209,10 +263,10 @@ map({
 })
 
 -- neo tree
-mapN({
+map({
 	n = {
-		["<C-f>"] = { "<cmd>Neotree toggle<cr>", desc = "Show file tree" },
-		["<C-o>"] = { "<cmd>Neotree focus<cr>", desc = "Focus file tree" },
+		["<C-f>"] = { "<cmd>Neotree toggle<cr>", "Show file tree" },
+		["<C-o>"] = { "<cmd>Neotree focus<cr>", "Focus file tree" },
 	},
 })
 
@@ -303,7 +357,6 @@ map({
 		["<leader>fb"] = { builtin.buffers, "find buffers" },
 		["<leader>fvr"] = { builtin.reloader, "find reloaders" },
 		["<leader>fc"] = { builtin.commands, "find commands" },
-		["<leader>fh"] = { builtin.help_tags, "find help tags" },
 		["<leader>fqf"] = { builtin.quickfix, "find quickfix" },
 		["<leader>fvo"] = { builtin.vim_options, "find vim options" },
 		["<leader>fkm"] = { builtin.keymaps, "find keymaps" },
@@ -313,7 +366,19 @@ map({
 			function()
 				builtin.lsp_references(require("telescope.themes").get_cursor())
 			end,
-			"find lsp references",
+			"find lsp references (small), see fu for big",
+		},
+		["<leader>fu"] = {
+			function()
+				builtin.lsp_references()
+			end,
+			"find lsp references (big), see U for cursor",
+		},
+		["<leader>fh"] = {
+			function()
+				builtin.lsp_type_definitions()
+			end,
+			"find lsp references (big), see U for cursor",
 		},
 		["<leader>fws"] = { builtin.lsp_workspace_symbols, "find lsp workspace symbols" },
 	},
@@ -338,7 +403,7 @@ map({
 })
 
 -- buffer
-mapN({
+map({
 	n = {
 		["<Shift-h>"] = { "<cmd>bprev<CR>" },
 		["<S-h>"] = { "<cmd>bprev<CR>" },
@@ -398,6 +463,8 @@ map({
 		["<leader>gd"] = { "<cmd> Gitsigns diffthis<CR>", "toggle word dif" },
 	},
 })
+
+M.register()
 
 -- chat gpt
 -- map({

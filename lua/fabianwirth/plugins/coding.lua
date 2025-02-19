@@ -1,5 +1,18 @@
 return {
-	{ "github/copilot.vim",        lazy = false },
+
+	-- .local/share/nvim/lazy/copilot.vim:
+	-- dist/language-server.js
+	-- increase limit here, since copilot leaks memory a lot
+	{ "github/copilot.vim", lazy = false, enable = false },
+	-- {
+	-- 	"zbirenbaum/copilot.lua",
+	-- 	cmd = "Copilot",
+	-- 	event = "InsertEnter",
+	-- 	enable = false,
+	-- 	config = function()
+	-- 		require("copilot").setup({})
+	-- 	end,
+	-- },
 	{ "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
 	{ "neovim/nvim-lspconfig" },
 	{
@@ -58,8 +71,7 @@ return {
 		run = "TSUpdate",
 	},
 	{
-		"weilbith/nvim-code-action-menu",
-		cmd = "CodeActionMenu",
+		"aznhe21/actions-preview.nvim",
 	},
 	{
 		"nvim-neotest/neotest",

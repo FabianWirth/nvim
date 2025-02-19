@@ -6,6 +6,13 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 	{
+		enabled = false,
+		"gelguy/wilder.nvim",
+		config = function()
+			require("wilder").setup({ modes = { ":", "/", "?" } })
+		end,
+	},
+	{
 		"FabianWirth/search.nvim",
 		-- dir = "/home/fabian/dev/lua/search.nvim",
 		name = "search",
@@ -50,12 +57,13 @@ return {
 		config = true,
 	},
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
-	{ "mbbill/undotree",         lazy = false },
+	{ "mbbill/undotree", lazy = false },
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
 		dependencies = {
 			"MunifTanjim/nui.nvim",
+			"rcarriga/nvim-notify",
 		},
 	},
 	-- install with yarn or npm
